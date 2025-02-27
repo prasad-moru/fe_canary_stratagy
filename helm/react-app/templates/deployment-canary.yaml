@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "react-app.fullname" . }}-canary
+  labels:
+    {{- include "react-app.labels" . | nindent 4 }}
+    release: canary
+spec:
+  replicas: {{ .Values.replicaCount | int | div 10 | max 1 }} # 10% of replicaCount or at least 1
+  selector:
+    matchLabels:
+      app: {{ include "react-app.name" . }}
+      release: canary
+  template:
+    metadata:
+      labels:
+        app: {{ include "react-app.name" . }}
+        release: canary
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

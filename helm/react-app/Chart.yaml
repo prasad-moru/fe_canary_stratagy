@@ -1,0 +1,18 @@
+apiVersion: v2
+name: react-app
+description: A Helm chart for deploying a React application
+
+# A chart can be either an 'application' or a 'library' chart.
+type: application
+
+# The version of the chart itself
+version: 1.0.0
+
+# The version of the application enclosed in the chart
+appVersion: "1.0.0"
+
+# Optional: dependencies can be listed here if your chart relies on other charts
+# dependencies:
+#   - name: mysql
+#     version: "1.6.9"
+#     repository: "https://charts.bitnami.com/bitnami"

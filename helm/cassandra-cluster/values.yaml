@@ -1,0 +1,30 @@
+replicaCount: 3
+
+image:
+  repository: bitnami/cassandra
+  tag: 3.11.11
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 9042
+
+persistence:
+  enabled: true
+  storageClass: "standard" # Change if necessary
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "2Gi"
+  limits:
+    cpu: "1000m"
+    memory: "4Gi"
+
+hpa:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 7
+  targetCPUUtilizationPercentage: 70

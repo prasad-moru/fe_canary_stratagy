@@ -1,0 +1,50 @@
+{{- include "cassandra-cluster.labels" . | nindent 4 }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "cassandra-cluster.fullname" . }}
+  labels:
+    {{- include "cassandra-cluster.labels" . | nindent 4 }}
+spec:
+  serviceName: "{{ include "cassandra-cluster.fullname" . }}"
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cassandra-cluster.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "cassandra-cluster.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: cassandra
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 9042
+              name: cql
+          env:
+            - name: CASSANDRA_CLUSTER_NAME
+              value: "CassandraCluster"
+            - name: CASSANDRA_DC
+              value: "DC1"
+            - name: CASSANDRA_RACK
+              value: "Rack1"
+            - name: CASSANDRA_SEEDS
+              value: "{{ include "cassandra-cluster.fullname" . }}-0.{{ include "cassandra-cluster.fullname" . }}"
+          volumeMounts:
+            - name: cassandra-data
+              mountPath: /bitnami/cassandra
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: cassandra-data
+      spec:
+        accessModes: [ "{{ .Values.persistence.accessMode }}" ]
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
