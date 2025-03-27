@@ -1,9 +1,12 @@
 name: Deploy React Application to AWS EKS
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_dispatch:
+
+# on:
+#   push:
+#     branches:
+#       - dev
 
 env:
   AWS_REGION: 'us-east-1'
