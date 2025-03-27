@@ -2,7 +2,7 @@ name: CI/CD Pipeline for React App
 
 on:
   push:
-    branches: [ main ] # Adjust to your branch name
+    branches: [ dev ] # Adjust to your branch name
 
 env:
   GCP_PROJECT_ID: eternal-arcana-222507
