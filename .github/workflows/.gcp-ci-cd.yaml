@@ -1,8 +1,9 @@
 name: CI/CD Pipeline for React App
+disabled: true
 
-on:
-  push:
-    branches: [ dev ] # Adjust to your branch name
+#on:
+#  push:
+#    branches: [ dev ] # Adjust to your branch name
 
 env:
   GCP_PROJECT_ID: eternal-arcana-222507
